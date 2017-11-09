@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block main %}
+<form method=post>
+    <dl>
+        {{ render_field(form.week) }}
+    </dl>
+    <p><input type=submit value=Week>
+</form>
+{% endblock %}

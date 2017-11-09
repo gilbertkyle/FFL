@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+<head>
+
+<script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+</head>
+
+
+
+{% block main %}
+
+
+<form id=form method=post>
+    <dl>
+        {{ render_field(form.week) }}
+        {{ render_field(form.quarterback, class="autocomplete_player", id="qb", autocomplete="off") }}
+        {{ render_field(form.running_back, class="autocomplete_player", id="rb", autocomplete="off") }}
+        {{ render_field(form.wide_receiver, class="autocomplete_player", id="wr", autocomplete="off") }}
+        {{ render_field(form.tight_end, class="autocomplete_player", id="te", autocomplete="off") }}
+        {{ render_field(form.defense, class="autocomplete_defense",id="dst", autocomplete="off") }}
+        <p><input type=submit id=submit value=Picks>
+    </dl>
+</form>
+
+
+
+<script>
+
+// I just copied this from stackoverflow. Can't take credit for this one.
+
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        matches.push(str);
+      }
+    });
+
+    cb(matches);
+  };
+};
+
+var defense = {{ defense|tojson }};
+var quarterbacks = {{ quarterbacks|tojson }};
+var running_backs = {{ running_backs|tojson }};
+var wide_receivers = {{ wide_receivers|tojson }};
+var tight_ends = {{ tight_ends|tojson }};
+var my_players = {{ my_players|tojson }};
+
+
+$('.autocomplete_defense').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+},
+{
+  name: 'defense',
+  source: substringMatcher(defense)
+});
+
+$('#qb').typeahead({
+    hint:true,
+    highlight: true,
+    minLength: 1
+},
+{
+    name: 'qb',
+    source: substringMatcher(quarterbacks)
+});
+
+$('#rb').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+},
+{
+    name: "rb",
+    source: substringMatcher(running_backs)
+});
+
+$('#wr').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+},
+{
+    name: 'wr',
+    source: substringMatcher(wide_receivers)
+});
+
+$('#te').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+},
+{
+    name: 'te',
+    source: substringMatcher(tight_ends)
+});
+
+$(document).ready(function() {
+    $('#form').submit(function(event) {
+        var qb_name = $('#qb').val();
+        var rb_name = $('#rb').val();
+        var wr_name = $('#wr').val();
+        var te_name = $('#te').val();
+        var dst_name = $('#dst').val();
+        if ($.inArray(qb_name, my_players) != -1) {
+            event.preventDefault();
+            alert("You have already picked that quarterback this season.");
+        } else if ($.inArray(rb_name, my_players) != -1) {
+            event.preventDefault();
+            alert("You have already picked that running back this season.");
+        } else if ($.inArray(wr_name, my_players) != -1) {
+            event.preventDefault();
+            alert("You have already picked that wide receiver this season.");
+        } else if ($.inArray(te_name, my_players) != -1) {
+            event.preventDefault();
+            alert("You have already picked that tight end this season");
+        } else if ($.inArray(dst_name, my_players) != -1) {
+            event.preventDefault();
+            alert("You have already picked that DST this season.");
+        }
+    });
+});
+
+</script>
+
+{% endblock %}
+
+
+

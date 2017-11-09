@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<h1>Week {{ week }}</h1>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Quarterback</th>
+        <th>QB Points</th>
+        <th>Running Back</th>
+        <th>RB Points</th>
+        <th>Wide Receiver</th>
+        <th>WR Points</th>
+        <th>Tight End</th>
+        <th>TE Points</th>
+        <th>Defense</th>
+        <th>Def Points</th>
+        <th>Total Points</th>
+    </tr>
+        {% for pick in picks %}
+        <tr>
+            <td>{{ pick.username }}</td>
+            <td>{{ pick.quarterback }}</td>
+            <td>{{ (pick.qb_points)| round(2) }}</td>
+            <td>{{ pick.running_back }}</td>
+            <td>{{ (pick.rb_points)| round(2) }}</td>
+            <td>{{ pick.wide_receiver }}</td>
+            <td>{{ (pick.wr_points)| round(2) }}</td>
+            <td>{{ pick.tight_end }}</td>
+            <td>{{ (pick.te_points)| round(2) }}</td>
+            <td>{{ pick.defense }}</td>
+            <td>{{ (pick.defense_points)| round(2) }}</td>
+            <td>{{ (pick.qb_points + pick.rb_points + pick.wr_points + pick.te_points + pick.defense_points) | round(2) }}</td>
+        {% endfor %}
+        </tr>
+        <tr>
+        {% for user in users %}
+            {% if user.username in users_without_picks %}
+            <td>{{ user.username }}</td>
+            <td>No pick</td>
+            <td>0.0</td>
+            <td>No Pick</td>
+            <td>0.0</td>
+            <td>No Pick</td>
+            <td>0.0</td>
+            <td>No Pick</td>
+            <td>0.0</td>
+            <td>No Pick</td>
+            <td>0.0</td>
+            <td>0.0</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>
+{% endblock %}

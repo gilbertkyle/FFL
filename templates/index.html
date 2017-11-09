@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+<style>
+table, th, td
+{
+    border: 5px solid black;
+}
+</style>
+
+
+{% block main %}
+<div>
+    <table>
+        <tr>
+            <th>Week</th>
+            <th>Quarterback</th>
+            <th>QB points</th>
+            <th>Running Back</th>
+            <th>RB Points</th>
+            <th>Wide Receiver</th>
+            <th>WR Points</th>
+            <th>Tight End</th>
+            <th>TE Points</th>
+            <th>Defense</th>
+            <th>DST Points</th>
+            <th>Total Points</th>
+        </tr>
+    {% for pick in picks %}
+    <tr>
+        <td>{{ pick.week }} </td>
+        <td>{{ pick.quarterback }} </td>
+        <td>{{ pick.qb_points| round }} </td>
+        <td>{{ pick.running_back }} </td>
+        <td>{{ pick.rb_points | round }} </td>
+        <td>{{ pick.wide_receiver }} </td>
+        <td>{{ pick.wr_points| round }} </td>
+        <td>{{ pick.tight_end }} </td>
+        <td>{{ pick.te_points| round(2) }} </td>
+        <td>{{ pick.defense }} </td>
+        <td>{{ pick.defense_points| round(2) }} </td>
+        <td>{{ (pick.qb_points + pick.rb_points + pick.wr_points + pick.te_points + pick.defense_points) | round(2) }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}
